@@ -9,7 +9,9 @@ import (
 
 func main() {
 
-	xmlFile, err := os.Open("consulta.xml")
+	archiveName := "submeter.xml"
+
+	xmlFile, err := os.Open(archiveName)
 
 	if err != nil {
 		fmt.Errorf("ERROR")
