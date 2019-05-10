@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"encoding/xml"
 	"fmt"
+	"net"
 	"os"
 )
 
@@ -37,6 +39,18 @@ func main() {
 
 	if err := enc.Encode(v); err != nil {
 		fmt.Printf("error: %v\n", err)
+	}
+
+	conn, _ := net.Dial("tcp", "127.0.0.1:5050")
+	for {
+		// read in input from stdin
+		reader := bufio.NewReader(os.Stdout)
+		text, _ := reader.ReadString('\n')
+		// send to socket
+		fmt.Fprintf(conn, text+"\n")
+		// listen for reply
+		message, _ := bufio.NewReader(conn).ReadString('\n')
+		fmt.Print("Message from server: " + message)
 	}
 
 }
