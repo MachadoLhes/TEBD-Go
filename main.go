@@ -8,8 +8,20 @@ import (
 )
 
 func main() {
+	var opcao int
+	var archiveName string
 
-	archiveName := "submeter.xml"
+	fmt.Println("Você deseja submeter ou consultar?\n (1) submeter / (2) consultar")
+
+	fmt.Scanf("%d", &opcao)
+
+	if opcao == 1 {
+		archiveName = "submeter.xml"
+	} else if opcao == 2 {
+		archiveName = "consultaStatus.xml"
+	} else {
+		fmt.Errorf("selecione uma opção valida")
+	}
 
 	xmlFile, err := os.Open(archiveName)
 
@@ -27,7 +39,12 @@ func main() {
 	}
 
 	// listen for reply
-	message, _ := bufio.NewReader(conn).ReadString('\n')
-	fmt.Print("Message from server: " + message)
+	message := bufio.NewScanner(conn)
+	// .ReadString('\n')
+	fmt.Print("Message from server: \n")
+	for message.Scan() {
+		line := message.Text()
+		fmt.Fprintf(os.Stdout, line+"\n")
+	}
 
 }
