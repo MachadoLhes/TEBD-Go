@@ -7,22 +7,7 @@ import (
 	"os"
 )
 
-func main() {
-	var opcao int
-	var archiveName string
-
-	fmt.Println("Você deseja submeter ou consultar?\n (1) submeter / (2) consultar")
-
-	fmt.Scanf("%d", &opcao)
-
-	if opcao == 1 {
-		archiveName = "submeter.xml"
-	} else if opcao == 2 {
-		archiveName = "consultaStatus.xml"
-	} else {
-		fmt.Errorf("selecione uma opção valida")
-	}
-
+func req(archiveName string) {
 	xmlFile, err := os.Open(archiveName)
 
 	if err != nil {
@@ -39,10 +24,30 @@ func main() {
 	}
 
 	message := bufio.NewScanner(conn)
-	fmt.Print("Message from server: \n")
 	for message.Scan() {
 		line := message.Text()
 		fmt.Fprintf(os.Stdout, line+"\n")
+	}
+}
+
+func main() {
+	opcao := 0
+
+	for opcao != 3 {
+
+		fmt.Println("Você deseja submeter ou consultar?\n (1) submeter / (2) consultar / (3) sair")
+		fmt.Scanf("%d", &opcao)
+
+		if opcao == 1 {
+			req("submeter.xml")
+		} else if opcao == 2 {
+			req("consultaStatus.xml")
+		} else if opcao == 3 {
+			fmt.Println("Exiting...")
+			break
+		} else {
+			fmt.Println("selecione uma opção valida")
+		}
 	}
 
 }
